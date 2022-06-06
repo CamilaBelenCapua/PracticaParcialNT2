@@ -1,5 +1,5 @@
  <template>
- <section class="src-componentes-navbar">
+ <section class="src-components-navbar">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -11,7 +11,13 @@
               <a class="nav-link" href="#">Pagos Realizados</a>
             </router-link>
           </li>
-         
+
+            <!-- Ruta al componente RespuestasParcial -->
+          <li class="nav-item">
+            <router-link to="/RespuestasParcial">
+              <a class="nav-link" href="#">Respuestas Parcial</a>
+            </router-link>
+          </li>
         </ul>
       </div>
     </nav>

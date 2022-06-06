@@ -127,9 +127,6 @@
                 <td>{{ calculoDeuda(pago)}}</td>
             </tr>
         </table>
-
-       
-
       <hr>
     </div>
   </section>
