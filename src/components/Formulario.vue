@@ -106,26 +106,33 @@
           <!-- Botón de envío -->
           <button class="btn btn-success my-4" :disabled="formState.$invalid">Enviar</button>
         </vue-form>   
-        
+      
+     
          <hr>
 
-        <table class="table table-dark">
+        <table class="table">
+          <thead class="table-dark">
             <tr>
-                <th>Fila</th>
+                <th>Posicion</th>
+                <th>Fecha</th>
                 <th>Nombre</th>
                 <th>Documento</th>
                 <th>Monto a Pagar</th>
                 <th>Pago Realizado</th>
                 <th>Deuda</th>
             </tr>
-            <tr v-for="(pago,index) in pagos" :key="index" >
-                <td>{{ index + 1 }}</td>
-                <td>{{ pago.nombre }}</td>
-                <td>{{ pago.documento }}</td>
-                <td>{{ pago.montoAPagar }}</td>
-                <td>{{ pago.pagoRealizado}}</td>
-                <td>{{ calculoDeuda(pago)}}</td>
-            </tr>
+          </thead>
+            <!--<div v-for="(pago,index) in pagos" :key="index">-->
+              <tr v-for="(pago,index) in pagosModificados" :key="index" :class="pago.backgroung">
+                  <td>{{ index + 1 }}</td>
+                  <td>{{pago.fecha}}</td>
+                  <td>{{ pago.nombre }}</td>
+                  <td>{{ pago.documento }}</td>
+                  <td>{{ pago.montoAPagar }}</td>
+                  <td>{{ pago.pagoRealizado}}</td>
+                  <td>{{ calculoDeuda(pago)}}</td>
+               </tr>
+            <!--</div>-->
         </table>
       <hr>
     </div>
@@ -157,8 +164,16 @@
         }
       },
       enviar() {
-        console.log({ ...this.formData })
-        this.pagos.push(this.formData )
+        const date = new Date()
+        const mes = date.getMonth()+1
+        const data = {
+          nombre: this.formData.nombre,
+          documento: this.formData.documento,
+          montoAPagar: this.formData.montoAPagar,
+          pagoRealizado: this.formData.pagoRealizado,
+          fecha: date.getDate()+"/"+mes+"/"+date.getFullYear(),
+        }
+        this.pagos.push(data)
         this.formData = this.getInicialData()
         this.formState._reset()  
       },
@@ -168,6 +183,26 @@
 
     },
     computed: {
+      pagosModificados: function () {
+    return this.pagos.map((pago) => {
+      let background = null
+      if(this.calculoDeuda(pago)>0){
+        background = "table-danger"  
+      }else if(this.calculoDeuda(pago)==0){
+        background = "table-success"
+      }else{
+        background = "table-primary"
+      }
+      return {
+        nombre: pago.nombre,
+        documento: pago.documento,
+        montoAPagar: pago.montoAPagar,
+        pagoRealizado: pago.pagoRealizado,
+        fecha: pago.fecha,
+        backgroung: background
+      }
+    })
+  }
     }
 }
 </script>
@@ -181,7 +216,16 @@
       background-color: #bbb;
   }  
 
-  pre {
-    color: white;
+   .pagoTotal{
+    color: green;
   }
+
+  .adeuda{
+        background-color: red;
+  }
+
+   .aFavor {
+      background-color: yellow;
+  } 
+
 </style>
